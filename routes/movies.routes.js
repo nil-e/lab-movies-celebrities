@@ -33,4 +33,52 @@ router.get("/movies/create", (req, res, next) => {
       });
     });
 
+router.get("/movies/:id", (req, res, next) => {
+    return Movie.findById(req.params.id)
+        .populate('cast')
+        .then((movie) => {
+        console.log(movie);
+        res.render("movies/movie-details",{movie});})
+        .catch((error) => {
+            console.log("error",error);
+        });
+    });
+
+router.post("/movies/:id/delete", (req, res, next) => {
+    console.log(req.params);
+        return Movie.findByIdAndRemove(req.params.id)
+         .then(() => {
+             res.redirect("/movies");})
+         .catch((error) => {
+           console.log("error",error);
+         });
+    });
+
+router.get("/movies/:id/edit", (req, res, next) => {
+        return Movie.findById(req.params.id)
+            .populate('cast')
+            .then((movie) => {
+                Celebrity.find()
+                .then((celebs) => {
+                    res.render("movies/edit-movie",{movie,celebs});
+                })
+                .catch((error) => {
+                    console.log("error",error);
+                })
+            })
+            .catch((error) => {
+                console.log("error",error);
+            });
+    });
+
+router.post("/movies/:id", (req, res, next) => {
+            return Movie.findByIdAndUpdate(req.params.id,req.body)
+             .then(() => {
+                 res.redirect("/movies");})
+             .catch((error) => {
+               console.log("error",error);
+               res.redirect("/movies/:id");
+             });
+    });
+
 module.exports = router;
