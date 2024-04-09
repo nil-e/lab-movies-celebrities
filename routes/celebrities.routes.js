@@ -12,7 +12,7 @@ router.post("/celebrities/create", (req, res, next) => {
     .then(() => {
       return Celebrity.find()
         .then((celebs) => {
-        res.render("celebrities/celebrities",{celebs});})
+        res.redirect("/celebrities");})
     })
     .catch((error) => {
       console.log("error",error);
@@ -20,7 +20,7 @@ router.post("/celebrities/create", (req, res, next) => {
     });
 });
 
-router.get("/celebrities/celebrities", (req, res, next) => {
+router.get("/celebrities", (req, res, next) => {
     return Celebrity.find()
     .then((celebs) => {
       res.render("celebrities/celebrities",{celebs});
